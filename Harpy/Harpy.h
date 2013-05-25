@@ -23,8 +23,8 @@ typedef NS_ENUM(NSUInteger, HarpyAlertType)
 
     HarpyAlertTypeForce,    // Forces user to update your app
     HarpyAlertTypeOption,   // (DEFAULT) Presents user with option to update app now or at next launch
-    HarpyAlertTypeSkip      // Presents User with option to update the app now, at next launch, or to skip this version all together
-
+    HarpyAlertTypeSkip,      // Presents User with option to update the app now, at next launch, or to skip this version all together
+    HarpyAlertTypeLocalNotification, // Fire a local notification when user quits your app
 };
 
 @interface Harpy : NSObject
@@ -79,5 +79,17 @@ typedef NS_ENUM(NSUInteger, HarpyAlertType)
  Place in applicationDidBecomeActive:
  */
 - (void)checkVersionWeekly;
+
+/*
+ Call this method in app delegate's applicationDidEnterBackground:
+ If update is ready, user will receive a local notification right after quitting your app.
+ */
+- (void)scheduleHarpyLocalNotification;
+
+/*
+ Call this method in app delegate's application:didReceiveLocalNotification:
+ If local notification was scheduled by Harpy, then launch App Store.
+ */
+- (void)handleLaunchingOnLocalNotification:(UILocalNotification *)notification;
 
 @end

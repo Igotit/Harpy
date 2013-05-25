@@ -22,6 +22,7 @@
 <UIAlertViewDelegate>
 
 @property (strong, nonatomic) NSDate *lastVersionCheckPerformedOnDate;
+@property (strong, nonatomic) UILocalNotification *harpyLocalNotification;
 
 - (void)launchAppStore;
 
@@ -149,6 +150,23 @@
     }
 }
 
+- (void)scheduleHarpyLocalNotification
+{
+    if (self.harpyLocalNotification) {
+        self.harpyLocalNotification.fireDate = [[NSDate date] dateByAddingTimeInterval:3];
+        [[UIApplication sharedApplication] scheduleLocalNotification:self.harpyLocalNotification];
+        self.harpyLocalNotification = nil;
+    }
+}
+
+- (void)handleLaunchingOnLocalNotification:(UILocalNotification *)notification
+{
+    if ([notification.alertAction isEqualToString:HarpyLocalizedString(@"Update")]) {
+        [self launchAppStore];
+    }
+}
+
+
 #pragma mark - Private Methods
 - (NSUInteger)numberOfDaysElapsedBetweenILastVersionCheckDate
 {
@@ -228,6 +246,17 @@
                                                       otherButtonTitles:HarpyLocalizedString(@"Update"), HarpyLocalizedString(@"Next time"), nil];
             
             [alertView show];
+            
+        } break;
+            
+        case HarpyAlertTypeLocalNotification: {
+            
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.timeZone = [NSTimeZone defaultTimeZone];
+            localNotification.alertBody = [NSString stringWithFormat:HarpyLocalizedString(@"A new version of %@ is available. Please update to version %@ now."), appName, currentAppStoreVersion];
+            localNotification.alertAction = HarpyLocalizedString(@"Update");
+            localNotification.soundName = UILocalNotificationDefaultSoundName;
+            self.harpyLocalNotification = localNotification;
             
         } break;
             
