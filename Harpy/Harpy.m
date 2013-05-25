@@ -203,7 +203,7 @@
 - (void)showAlertWithAppStoreVersion:(NSString *)currentAppStoreVersion
 {
     // Reference App's name
-    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleNameKey];
+    NSString *appName = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:(NSString*)kCFBundleNameKey];
     
     switch ( self.alertType ) {
             
