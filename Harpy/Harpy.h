@@ -20,10 +20,9 @@
 
 typedef NS_ENUM(NSUInteger, HarpyAlertType)
 {
-
     HarpyAlertTypeForce,    // Forces user to update your app
     HarpyAlertTypeOption,   // (DEFAULT) Presents user with option to update app now or at next launch
-    HarpyAlertTypeSkip,      // Presents User with option to update the app now, at next launch, or to skip this version all together
+    HarpyAlertTypeSkip      // Presents User with option to update the app now, at next launch, or to skip this version all together
     HarpyAlertTypeLocalNotification, // Fire a local notification when user quits your app
 };
 
@@ -41,42 +40,42 @@ typedef NS_ENUM(NSUInteger, HarpyAlertType)
 @property (strong, nonatomic) NSString *appID;
 
 /**
- The alert type to present to the user when there is an update. See the `HarpyAlertType` enum above.
+ (OPTIONAL) The alert type to present to the user when there is an update. See the `HarpyAlertType` enum above.
  */
 @property (assign, nonatomic) HarpyAlertType alertType;
 
 /**
- The shared Harpy instance.
+ (OPTIONAL) If your application is not availabe in the U.S. Store, you must specify the two-letter 
+ country code for the region in which your applicaiton is available in.
+ */
+@property (copy, nonatomic) NSString *countryCode;
+
+/**
+ Haroy's Singleton method.
  */
 + (id)sharedInstance;
 
 /**
-  Checks the installed version of your application against the version currently available on the iTunes store.
-  If a newer version exists in the AppStore, Harpy prompts your user to update their copy of your app.
- */
-
-/**
- NOTE: ONLY USE ONE OF THE METHODS BELOW, AS THEY ALL PERFORM A CHECK ON YOUR APPLICATION'S FIRST LAUNCH
- USING MULTIPLE METHODS WILL CAUSE MULTIPLE UIALERTVIEWS TO POP UP.
- */
-
-/*
- Perform check for new version of your app
- Place in application:didFinishLaunchingWithOptions: AFTER calling makeKeyAndVisible on your UIWindow iVar
+ Checks the installed version of your application against the version currently available on the iTunes store.
+ If a newer version exists in the AppStore, Harpy prompts your user to update their copy of your app.
+ Place in application:didFinishLaunchingWithOptions: AFTER calling makeKeyAndVisible on your UIWindow iVar.
+ Do not use this method if you are using checkVersionDaily or checkVersionWeekly.
  */
 - (void)checkVersion;
 
-/*
- Perform daily check for new version of your app
- Useful if user returns to you app from background after extended period of time
- Place in applicationDidBecomeActive:
+/**
+ Perform daily check for new version of your app.
+ Useful if user returns to you app from background after extended period of time.
+ Place in applicationDidBecomeActive:.
+ Do not use this method if you are using checkVersion or checkVersionWeekly.
  */
 - (void)checkVersionDaily;
 
-/*
- Perform weekly check for new version of your app
- Useful if user returns to you app from background after extended period of time
- Place in applicationDidBecomeActive:
+/**
+ Perform weekly check for new version of your app.
+ Useful if user returns to you app from background after extended period of time.
+ Place in applicationDidBecomeActive:.
+ Do not use this method if you are using checkVersion or checkVersionDaily.
  */
 - (void)checkVersionWeekly;
 

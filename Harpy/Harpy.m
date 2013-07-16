@@ -18,12 +18,18 @@
 #define HarpyLocalizedString(stringKey) \
     [[NSBundle bundleWithPath:kHarpyBundle] localizedStringForKey:stringKey value:stringKey table:@"HarpyLocalizable"]
 
-@interface Harpy()
-<UIAlertViewDelegate>
+/// App Store Link
+#define kAppStoreLinkUniversal              @"http://itunes.apple.com/lookup?id=%@"
+#define kAppStoreLinkCountrySpecific        @"http://itunes.apple.com/lookup?id=%@&country=%@"
+
+@interface Harpy() <UIAlertViewDelegate>
 
 @property (strong, nonatomic) NSDate *lastVersionCheckPerformedOnDate;
 @property (strong, nonatomic) UILocalNotification *harpyLocalNotification;
 
+- (NSUInteger)numberOfDaysElapsedBetweenILastVersionCheckDate;
+- (void)showAlertIfCurrentAppStoreVersionNotSkipped:(NSString *)currentAppStoreVersion;
+- (void)showAlertWithAppStoreVersion:(NSString *)currentAppStoreVersion;
 - (void)launchAppStore;
 
 @end
@@ -54,7 +60,14 @@
 - (void)checkVersion
 {
     // Asynchronously query iTunes AppStore for publically available version
-    NSString *storeString = [NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%@", self.appID];
+    
+    NSString *storeString = nil;
+    if ( [self countryCode] ) {
+        storeString = [NSString stringWithFormat:kAppStoreLinkCountrySpecific, self.appID, self.countryCode];
+    } else {
+        storeString = [NSString stringWithFormat:kAppStoreLinkUniversal, self.appID];
+    }
+    
     NSURL *storeURL = [NSURL URLWithString:storeString];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:storeURL];
     [request setHTTPMethod:@"GET"];
