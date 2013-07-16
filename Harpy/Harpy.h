@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, HarpyAlertType)
 {
     HarpyAlertTypeForce,    // Forces user to update your app
     HarpyAlertTypeOption,   // (DEFAULT) Presents user with option to update app now or at next launch
-    HarpyAlertTypeSkip      // Presents User with option to update the app now, at next launch, or to skip this version all together
+    HarpyAlertTypeSkip,      // Presents User with option to update the app now, at next launch, or to skip this version all together
     HarpyAlertTypeLocalNotification, // Fire a local notification when user quits your app
 };
 
